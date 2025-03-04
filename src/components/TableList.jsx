@@ -19,16 +19,18 @@ function TableList() {
 
   return (
     <div>
-      <button onClick={addTable}>Add Table</button>
-      <div>
-        {tables.sort((a, b) => a - b).map((tableNumber) => (
-          <Table
-            key={tableNumber}
-            number={tableNumber}
-            removeTable={removeTable}
-          />
-        ))}
-      </div>
+        <h1>Tablelist</h1>
+        <div>
+            {tables.sort((a, b) => a - b).map((tableNumber) => (
+            <Table
+                key={tableNumber}
+                number={tableNumber}
+                removeTable={removeTable}
+            />
+            ))}
+        </div>
+        <button onClick={addTable}>Add Table</button>
+
     </div>
   );
 }
