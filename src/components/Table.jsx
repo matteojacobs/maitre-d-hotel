@@ -1,13 +1,14 @@
 import React from 'react';
 
-
-
-function Table({number}) {
-  const handleClick = () => {};
+function Table({ number, removeTable }) {
+  const handleClick = () => {
+    removeTable(number);
+  };
 
   return (
-    <div className="table" onClick={handleClick}>
+    <div className="table">
       <div>Table {number}</div>
+      <button onClick={handleClick}>Remove</button>
     </div>
   );
 }
