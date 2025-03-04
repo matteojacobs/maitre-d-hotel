@@ -2,12 +2,12 @@ import React from 'react';
 
 
 
-function Table() {
+function Table({number}) {
   const handleClick = () => {};
 
   return (
     <div className="table" onClick={handleClick}>
-      <span>Table</span>
+      <div>Table {number}</div>
     </div>
   );
 }
