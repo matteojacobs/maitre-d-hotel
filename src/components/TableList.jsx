@@ -5,8 +5,12 @@ function TableList() {
   const [tables, setTables] = useState([]);
 
   const addTable = () => {
-    const tableNumber = tables.length + 1;
-    setTables([...tables, tableNumber]);
+    // Find the smallest missing table number
+    let newTableNumber = 1;
+    while (tables.includes(newTableNumber)) {
+      newTableNumber++;
+    }
+    setTables([...tables, newTableNumber]);
   };
 
   const removeTable = (number) => {
@@ -17,7 +21,7 @@ function TableList() {
     <div>
       <button onClick={addTable}>Add Table</button>
       <div>
-        {tables.map((tableNumber) => (
+        {tables.sort((a, b) => a - b).map((tableNumber) => (
           <Table
             key={tableNumber}
             number={tableNumber}
