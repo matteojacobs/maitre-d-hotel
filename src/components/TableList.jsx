@@ -1,5 +1,7 @@
+const TableList = () => (
+  <section>
+    <h3>My favourite TableList</h3>
+  </section>
+);
 
-const TableList = () => {return (<p>I was baaararqsdfqsdfayaya9 (Laarne)</p>)};
-
-export default TableList
-
+export default TableList;
