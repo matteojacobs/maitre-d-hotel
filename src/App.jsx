@@ -1,4 +1,3 @@
-
 import './styles/App.css'
 import TableList from './components/TableList';
 
