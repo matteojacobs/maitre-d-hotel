@@ -1,4 +1,5 @@
 
-const TableList = () => (<p>I was baaararqsdfqsdfayaya9 (Laarne)</p>);
+const TableList = () => {return (<p>I was baaararqsdfqsdfayaya9 (Laarne)</p>)};
+
 export default TableList
 
