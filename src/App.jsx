@@ -1,5 +1,5 @@
 import React from 'react';
-import {Tablelist} from "./components/TableList";
+import {TableList} from "./components/TableList";
 import './styles/App.css';
 
 function App() {
