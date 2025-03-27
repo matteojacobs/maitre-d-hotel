@@ -1,5 +1,5 @@
 import './styles/App.css'
-import {TableList} from './components/TableList';
+import TableList from './components/TableList';
 
 function App() {
  <TableList />
