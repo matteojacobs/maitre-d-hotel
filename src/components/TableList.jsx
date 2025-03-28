@@ -54,8 +54,16 @@ const TableList = () => {
   }
 
   const handleAddTable = () => {
+    const currentNumbers = tables.map(table => table.number);
+
+    let newNumber = 1;
+    while (currentNumbers.includes(newNumber)) {
+    newNumber++;
+  }
+
+
     const newTable = {
-      number: tables.length + 1,
+      number: newNumber,
       status: 'reserved'
     };
     // creates a new array with all existing tables (...tables) and the newTable and updates the state
@@ -63,9 +71,12 @@ const TableList = () => {
   };
 
 
+
+
+  ////Learn this shit matteo!!!
   const handleUpdateTableStatus = (tableNumber) => {
     setTables(prevTables => {
-      return prevTables.map(table => {
+      const updatedTables = prevTables.map(table => {
         if (table.number === tableNumber) {
           const statusOrder = ['reserved', 'seated', 'orderTaken', 'foodDelivered'];
           const currentIndex = statusOrder.indexOf(table.status);
@@ -77,6 +88,13 @@ const TableList = () => {
         }
         return table;
       }).filter(Boolean); // Remove null tables
+      
+      // If the selected table was removed, clear the selection
+      if (!updatedTables.some(table => table.number === tableNumber)) {
+        setSelectedTable(null);
+      }
+      
+      return updatedTables;
     });
   };
 
