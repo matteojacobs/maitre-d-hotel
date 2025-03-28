@@ -5,7 +5,14 @@ import TableDetail from "./TableDetail"
 
 
 
-const Table = ({number, onSelect}) => {
+const Table = ({number, status, onSelect}) => {
+    const statusButtonStyles = {
+        reserved: { backgroundColor: "lightblue", color: 'black' },
+        seated: { backgroundColor: "#FA8072", color: 'black' },
+        orderTaken: { backgroundColor: "#FAD6A5", color: 'black' },
+        foodDelivered: { backgroundColor: "#D8E4BC", color: 'black' },
+    }
+
     const handleClick = () => {
         onSelect(number);
 
@@ -13,19 +20,21 @@ const Table = ({number, onSelect}) => {
 
     return (
 
-    <li><button onClick={handleClick} className="table">
-        <p> table: {number} </p>
+    <li><button onClick={handleClick} style={statusButtonStyles[status]} className="table">
+        <p> table: {number} ({status}) </p>
     </button></li>
     );
 }
 
 
-export const List = ({nTables, onTableSelect}) => (
+export const List = ({tables, onTableSelect}) => (
     <ul>
-        {Array.from({length: nTables}).map((_, index) => (
-            <Table key={index} number={index + 1} onSelect={onTableSelect}/>
+        {tables.map((table) =>(
+            <Table key={table.number} number={table.number} onSelect={onTableSelect} status={table.status}/>
         ))}
-        <p>amountTables = {nTables}</p>
+            
+        
+        <p>Tables count: = {tables.length}</p>
     </ul>
 );
 
@@ -34,7 +43,7 @@ export const List = ({nTables, onTableSelect}) => (
 
 
 const TableList = () => {
-  const [amountTables, setAmountTables] = useState(0);
+  const [tables, setTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState(null);
   //function to add or remove tables
   //component for a table
@@ -44,11 +53,20 @@ const TableList = () => {
     setSelectedTable(number === selectedTable ? null : number)
   }
 
+  const handleAddTable = () => {
+    const newTable = {
+      number: tables.length + 1,
+      status: 'reserved'
+    };
+    // creates a new array with all existing tables (...tables) and the newTable and updates the state
+    setTables([...tables, newTable]);
+  };
+
   return (
     <section>
         <h3>This is the list of tables</h3>
-        <button onClick={() => setAmountTables(amountTables + 1)}>Add table</button>
-        <List nTables={amountTables} onTableSelect={handleTableSelect}/>
+        <button onClick={handleAddTable}>Add table</button>
+        <List tables={tables} onTableSelect={handleTableSelect}/>
 
         {/* only shows when a table is selected */}
         {selectedTable && <TableDetail number={selectedTable} />}

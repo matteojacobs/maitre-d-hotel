@@ -1,6 +1,20 @@
+
+const TableStatus = () => {
+    return (
+        <button>{tablestatus}</button>
+    );
+}
+
+
+
+
+
+
+
 const TableDetail = ({ number }) => (
   <div className="table-details">
-    <h4>Details for Table {number}</h4>
+    <h4>Table {number}</h4>
+    <TableStatus />
     {/* Add more details here as needed */}
   </div>
 );
