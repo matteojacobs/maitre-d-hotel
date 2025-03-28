@@ -62,6 +62,25 @@ const TableList = () => {
     setTables([...tables, newTable]);
   };
 
+
+  const handleUpdateTableStatus = (tableNumber) => {
+    setTables(prevTables => {
+      return prevTables.map(table => {
+        if (table.number === tableNumber) {
+          const statusOrder = ['reserved', 'seated', 'orderTaken', 'foodDelivered'];
+          const currentIndex = statusOrder.indexOf(table.status);
+          const nextStatus = statusOrder[currentIndex + 1] || 'remove';
+          
+          return nextStatus === 'remove' 
+            ? null // Mark for removal
+            : { ...table, status: nextStatus };
+        }
+        return table;
+      }).filter(Boolean); // Remove null tables
+    });
+  };
+
+
   return (
     <section>
         <h3>This is the list of tables</h3>
@@ -69,7 +88,7 @@ const TableList = () => {
         <List tables={tables} onTableSelect={handleTableSelect}/>
 
         {/* only shows when a table is selected */}
-        {selectedTable && <TableDetail number={selectedTable} />}
+        {selectedTable && <TableDetail number={selectedTable} onStatusChange={() => handleUpdateTableStatus(selectedTable)}/>}
 
     </section>
   );
