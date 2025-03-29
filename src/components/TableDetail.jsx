@@ -42,7 +42,7 @@ const MenuList = ({ onOrderUpdate }) => {
     { emoji: "🍗", name: "Roasted chicken", price: 17, total: 0 }
   ]);
 
-  const handleCountChange = (index, name, newCount, price) => {
+  const handleCountChange = (index, newCount, price) => {
     const updatedItems = [...items];
     updatedItems[index].total = price * newCount;
     setItems(updatedItems);
