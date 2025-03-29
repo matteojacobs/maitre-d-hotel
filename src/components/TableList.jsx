@@ -130,7 +130,7 @@ const TableList = () => {
         {selectedTable && 
         <TableDetail 
         number={selectedTable} 
-        
+        status={tables.find(table => table.number === selectedTable)?.status || 'reserved'}
         onStatusChange={() => handleUpdateTableStatus(selectedTable)}
         orderedItems={tableOrders[selectedTable] || []}
         onOrderUpdate={(items) => handleOrderUpdate(selectedTable, items)}
