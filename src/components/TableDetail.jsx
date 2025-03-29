@@ -1,6 +1,8 @@
+import "../styles/TableDetail.css"
+
 const TableStatus = ({ onStatusChange }) => {
   return (
-    <button onClick={onStatusChange}>Change status</button>
+    <button className="tableDetail__status--btn" onClick={onStatusChange}>Change status</button>
   );
 };
 
@@ -21,11 +23,11 @@ const MenuItem = ({ emoji, name, price, onCountChange, clickCount }) => {
   return (
     <div>
       <button className="menuItem" onClick={handlePlus}>
-        <span>{emoji} {name} (€{price})</span>
-        <span>amount bought: {clickCount} </span>
+        <span className="menuItem__title">{emoji} {name} (€{price})</span>
+        <span className="menuItem__amount">amount bought: {clickCount} </span>
       </button>
-      {clickCount > 0 && (<button onClick={handleMinus}>remove item</button>)}
-      <span>Total price: €{totalPrice}</span>
+      {clickCount > 0 && (<button className="menuItem__button" onClick={handleMinus}>remove item</button>)}
+      <span className="menuItem__totalPrice">Total price: €{totalPrice}</span>
     </div>
   );
 };
@@ -49,10 +51,10 @@ const MenuList = ({ menuItems, onOrderUpdate }) => {
   const total = menuItems.reduce((sum, item) => sum + item.total, 0);
 
   return (
-    <div>
-      <ul>
+    <div className="menuList">
+      <ul className="menuList__items">
         {menuItems.map((item, index) => (
-          <li key={index}>
+          <li className="menuList__item" key={index}>
             <MenuItem 
               emoji={item.emoji} 
               name={item.name} 
@@ -63,7 +65,7 @@ const MenuList = ({ menuItems, onOrderUpdate }) => {
           </li>
         ))}
       </ul>
-      <div>Total: €{total}</div>
+      <div className="menuList__total">Total: €{total}</div>
     </div>
   );
 };
@@ -73,15 +75,15 @@ const Bill = ({ orderedItems }) => {
 
   return (
     <div className="bill">
-      <h3>Bill</h3>
-      <ul>
+      <h3 className="bill__title">Bill</h3>
+      <ul className="bill__items">
         {orderedItems.filter(item => item.quantity > 0).map((item, index) => (
-          <li key={index}>
+          <li lassName="bill__item" key={index}>
             {item.name} - {item.quantity} x €{item.price} = €{item.total}
           </li>
         ))}
       </ul>
-      <div>Total: €{total}</div>
+      <div lassName="bill__total">Total: €{total}</div>
     </div>
   );
 };
@@ -93,8 +95,8 @@ const TableDetail = ({ number, status, onStatusChange, orderedItems, onOrderUpda
   const shouldShowBill = status === 'foodDelivered';
 
   return (
-    <div className="table-details">
-      <h4>Table {number}</h4>
+    <div className="tableDetails">
+      <h4 className="tableDetails__title" >Table {number}</h4>
       <TableStatus onStatusChange={onStatusChange}/>
 
       {shouldShowMenu && (<MenuList 

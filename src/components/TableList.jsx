@@ -1,5 +1,6 @@
 import { useState } from "react";
 import TableDetail from "./TableDetail"
+import "../styles/TableList.css"
 
 
 
@@ -20,21 +21,21 @@ const Table = ({number, status, onSelect}) => {
 
     return (
 
-    <li><button onClick={handleClick} style={statusButtonStyles[status]} className="table">
-        <p> table: {number} ({status}) </p>
+    <li className="tablesList__item"><button className="tablesList__button" onClick={handleClick} style={statusButtonStyles[status]}>
+        <p className="tablesList__name"> table: {number} ({status}) </p>
     </button></li>
     );
 }
 
 
 export const List = ({tables, onTableSelect}) => (
-    <ul>
+    <ul className="tablesList">
         {tables.map((table) =>(
             <Table key={table.number} number={table.number} onSelect={onTableSelect} status={table.status}/>
         ))}
             
         
-        <p>Tables count: = {tables.length}</p>
+        <p className="tablesList__count">Tables count: = {tables.length}</p>
     </ul>
 );
 
@@ -47,10 +48,46 @@ const TableList = () => {
   const [selectedTable, setSelectedTable] = useState(null);
   const [tableOrders, setTableOrders] = useState({});
   const [menuItems] = useState([
-    { emoji: "🍝", name: "Spaghetti", price: 17 },
-    { emoji: "🍟", name: "French fries", price: 1 },
-    { emoji: "🍗", name: "Roasted chicken", price: 17 }
-  ]);
+  // Starters (5)
+  { emoji: "🧀", name: "Cheese platter", price: 12, category: "starter" },
+  { emoji: "🥗", name: "Caesar salad", price: 10, category: "starter" },
+  { emoji: "🍤", name: "Garlic shrimp", price: 14, category: "starter" },
+  { emoji: "🧆", name: "Falafel", price: 8, category: "starter" },
+  { emoji: "🥣", name: "Soup of the day", price: 7, category: "starter" },
+
+  // Main Dishes (10)
+  { emoji: "🍝", name: "Spaghetti Bolognese", price: 17, category: "main" },
+  { emoji: "🍗", name: "Roasted chicken", price: 15, category: "main" },
+  { emoji: "🍔", name: "Gourmet burger", price: 14, category: "main" },
+  { emoji: "🍕", name: "Margherita pizza", price: 16, category: "main" },
+  { emoji: "🍛", name: "Chicken curry", price: 15, category: "main" },
+  { emoji: "🥘", name: "Beef stir-fry", price: 18, category: "main" },
+  { emoji: "🌮", name: "Taco trio", price: 12, category: "main" },
+  { emoji: "🍣", name: "Sushi platter", price: 22, category: "main" },
+  { emoji: "🍜", name: "Ramen", price: 13, category: "main" },
+  { emoji: "🥩", name: "Grilled steak", price: 25, category: "main" },
+
+  // Desserts (5)
+  { emoji: "🍰", name: "Chocolate cake", price: 9, category: "dessert" },
+  { emoji: "🍨", name: "Vanilla ice cream", price: 6, category: "dessert" },
+  { emoji: "🍮", name: "Crème brûlée", price: 8, category: "dessert" },
+  { emoji: "🥧", name: "Apple pie", price: 7, category: "dessert" },
+  { emoji: "🍫", name: "Chocolate mousse", price: 7, category: "dessert" },
+
+  // Soft Drinks (5)
+  { emoji: "🥤", name: "Cola", price: 3, category: "softDrink" },
+  { emoji: "🧃", name: "Orange juice", price: 4, category: "softDrink" },
+  { emoji: "🧋", name: "Bubble tea", price: 6, category: "softDrink" },
+  { emoji: "☕", name: "Coffee", price: 4, category: "softDrink" },
+  { emoji: "🍵", name: "Green tea", price: 3, category: "softDrink" },
+
+  // Alcoholic Beverages (5)
+  { emoji: "🍺", name: "Craft beer", price: 7, category: "alcoholic" },
+  { emoji: "🍷", name: "Red wine", price: 9, category: "alcoholic" },
+  { emoji: "🥃", name: "Whiskey", price: 12, category: "alcoholic" },
+  { emoji: "🍹", name: "Mojito", price: 10, category: "alcoholic" },
+  { emoji: "🍸", name: "Martini", price: 11, category: "alcoholic" }
+]);
 
   const handleTableSelect = (number) => {
     {/* if number is not equal to selectedTable or null then it sets setSelectedTable to number otherwise it deselects table */}
@@ -121,9 +158,9 @@ const TableList = () => {
   };
 
   return (
-    <section>
-        <h3>This is the list of tables</h3>
-        <button onClick={handleAddTable}>Add table</button>
+    <section className="tablesSection">
+        <h3 className="tablesSection__title">This is the list of tables</h3>
+        <button className="tablesSection__button" onClick={handleAddTable}>Add table</button>
         <List tables={tables} onTableSelect={handleTableSelect}/>
 
         {/* only shows when a table is selected */}
