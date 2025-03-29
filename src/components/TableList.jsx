@@ -45,8 +45,7 @@ export const List = ({tables, onTableSelect}) => (
 const TableList = () => {
   const [tables, setTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState(null);
-  //function to add or remove tables
-  //component for a table
+  const [tableOrders, setTableOrders] = useState({});
 
   const handleTableSelect = (number) => {
     {/* if number is not equal to selectedTable or null then it sets setSelectedTable to number otherwise it deselects table */}
@@ -55,12 +54,9 @@ const TableList = () => {
 
   const handleAddTable = () => {
     const currentNumbers = tables.map(table => table.number);
-
     let newNumber = 1;
-    while (currentNumbers.includes(newNumber)) {
-    newNumber++;
-  }
 
+    while (currentNumbers.includes(newNumber)) {newNumber++;}
 
     const newTable = {
       number: newNumber,
@@ -68,10 +64,14 @@ const TableList = () => {
     };
     // creates a new array with all existing tables (...tables) and the newTable and updates the state
     setTables([...tables, newTable]);
+
+    //adds a new empty array(the order for the new table) mapped to a key [newNumber](table) in an object.
+    //initializes a new empty order for new table
+    setTableOrders(prev => ({
+      ...prev,
+      [newNumber]: []
+    }));
   };
-
-
-
 
   ////Learn this shit matteo!!!
   const handleUpdateTableStatus = (tableNumber) => {
@@ -92,12 +92,24 @@ const TableList = () => {
       // If the selected table was removed, clear the selection
       if (!updatedTables.some(table => table.number === tableNumber)) {
         setSelectedTable(null);
+
+        setTableOrders(prev => {
+          const newOrders = {...prev};
+          delete newOrders[tableNumber];
+          return newOrders;
+        });
       }
-      
       return updatedTables;
     });
   };
 
+  ////look at this an extra time matteo
+  const handleOrderUpdate = (tableNumber, items) => {
+    setTableOrders(prev => ({
+      ...prev,
+      [tableNumber]: items
+    }));
+  };
 
   return (
     <section>
@@ -106,7 +118,13 @@ const TableList = () => {
         <List tables={tables} onTableSelect={handleTableSelect}/>
 
         {/* only shows when a table is selected */}
-        {selectedTable && <TableDetail number={selectedTable} onStatusChange={() => handleUpdateTableStatus(selectedTable)}/>}
+        {selectedTable && 
+        <TableDetail 
+        number={selectedTable} 
+        onStatusChange={() => handleUpdateTableStatus(selectedTable)}
+        orderedItems={tableOrders[selectedTable] || []}
+        onOrderUpdate={(items) => handleOrderUpdate(selectedTable, items)}
+        />}
 
     </section>
   );
