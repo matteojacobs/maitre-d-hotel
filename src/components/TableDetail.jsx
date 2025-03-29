@@ -6,18 +6,15 @@ const TableStatus = ({ onStatusChange }) => {
   );
 };
 
-const MenuItem = ({ emoji, name, price, onCountChange }) => {
-  const [clickCount, setClickCount] = useState(0);
+const MenuItem = ({ emoji, name, price, onCountChange, clickCount }) => {
 
   const handlePlus = () => {
     const newCount = clickCount + 1;
-    setClickCount(newCount);
     onCountChange(name, newCount, price);
   };
 
   const handleMinus = () => {
-    const newCount = Math.max(0, clickCount - 1);
-    setClickCount(newCount);
+    const newCount = clickCount - 1;
     onCountChange(name, newCount, price);
   };
 
@@ -35,40 +32,34 @@ const MenuItem = ({ emoji, name, price, onCountChange }) => {
   );
 };
 
-const MenuList = ({ onOrderUpdate }) => {
-  const [items, setItems] = useState([
-    { emoji: "🍝", name: "Spaghetti", price: 17, total: 0 },
-    { emoji: "🍟", name: "French fries", price: 1, total: 0 },
-    { emoji: "🍗", name: "Roasted chicken", price: 17, total: 0 }
-  ]);
-
+const MenuList = ({ menuItems, onOrderUpdate }) => {
   const handleCountChange = (index, name, newCount, price) => {
-    const updatedItems = [...items];
-    updatedItems[index].total = price * newCount;
-    setItems(updatedItems);
+    const updatedItems = [...menuItems].map((item, i) => {
+      if (i === index) {
+        return {
+          ...item,
+          quantity: newCount,
+          total: price * newCount
+        };
+      }
+      return item;
+    });
     
-    // Create an array of ordered items with quantities
-    const orderedItems = items.map((item, i) => ({
-      name: item.name,
-      quantity: i === index ? newCount : item.total / item.price || 0,
-      price: item.price,
-      total: i === index ? price * newCount : item.total
-    }));
-    
-    onOrderUpdate(orderedItems);
+    onOrderUpdate(updatedItems);
   };
 
-  const grandTotal = items.reduce((sum, item) => sum + item.total, 0);
+  const grandTotal = menuItems.reduce((sum, item) => sum + item.total, 0);
 
   return (
     <div>
       <ul>
-        {items.map((item, index) => (
+        {menuItems.map((item, index) => (
           <li key={index}>
             <MenuItem 
               emoji={item.emoji} 
               name={item.name} 
               price={item.price}
+              clickCount={item.quantity || 0}
               onCountChange={(name, newCount, price) => handleCountChange(index, name, newCount, price)}
             />
           </li>
@@ -98,14 +89,19 @@ const Bill = ({ orderedItems, onClose }) => {
   );
 };
 
-const TableDetail = ({ number, onStatusChange, orderedItems, onOrderUpdate }) => {
+const TableDetail = ({ number, onStatusChange, orderedItems, onOrderUpdate, menuItems }) => {
   const [showBill, setShowBill] = useState(false);
 
   return (
     <div className="table-details">
       <h4>Table {number}</h4>
       <TableStatus onStatusChange={onStatusChange}/>
-      <MenuList onOrderUpdate={onOrderUpdate} />
+
+      <MenuList 
+        menuItems={orderedItems.length > 0 ? orderedItems : menuItems.map(item => ({...item, quantity: 0, total: 0}))}
+        onOrderUpdate={onOrderUpdate} 
+      />
+
       {orderedItems.some(item => item.quantity > 0) && (
         <button onClick={() => setShowBill(true)}>Show Bill</button>
       )}

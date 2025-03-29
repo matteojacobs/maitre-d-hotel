@@ -46,6 +46,11 @@ const TableList = () => {
   const [tables, setTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState(null);
   const [tableOrders, setTableOrders] = useState({});
+  const [menuItems] = useState([
+    { emoji: "🍝", name: "Spaghetti", price: 17 },
+    { emoji: "🍟", name: "French fries", price: 1 },
+    { emoji: "🍗", name: "Roasted chicken", price: 17 }
+  ]);
 
   const handleTableSelect = (number) => {
     {/* if number is not equal to selectedTable or null then it sets setSelectedTable to number otherwise it deselects table */}
@@ -69,7 +74,11 @@ const TableList = () => {
     //initializes a new empty order for new table
     setTableOrders(prev => ({
       ...prev,
-      [newNumber]: []
+      [newNumber]: menuItems.map(item => ({
+        ...item,
+        quantity: 0,
+        total: 0
+      }))
     }));
   };
 
@@ -121,6 +130,7 @@ const TableList = () => {
         {selectedTable && 
         <TableDetail 
         number={selectedTable} 
+        
         onStatusChange={() => handleUpdateTableStatus(selectedTable)}
         orderedItems={tableOrders[selectedTable] || []}
         onOrderUpdate={(items) => handleOrderUpdate(selectedTable, items)}
