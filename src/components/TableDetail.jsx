@@ -48,23 +48,59 @@ const MenuList = ({ menuItems, onOrderUpdate }) => {
     onOrderUpdate(updatedItems);
   };
 
+  
+  const groupedItems = menuItems.reduce((acc, item) => {
+    if (!acc[item.category]) {
+      acc[item.category] = [];
+    }
+    acc[item.category].push(item);
+    return acc;
+  }, {});
+
+  
+  const categoryOrder = ['starter', 'main', 'dessert', 'softDrink', 'alcoholic'];
+
   const total = menuItems.reduce((sum, item) => sum + item.total, 0);
 
   return (
     <div className="menuList">
-      <ul className="menuList__items">
-        {menuItems.map((item, index) => (
-          <li className="menuList__item" key={index}>
-            <MenuItem 
-              emoji={item.emoji} 
-              name={item.name} 
-              price={item.price}
-              clickCount={item.quantity || 0}
-              onCountChange={(name, newCount, price) => handleCountChange(index, name, newCount, price)}
-            />
-          </li>
-        ))}
-      </ul>
+      {categoryOrder.map(category => {
+        const itemsInCategory = groupedItems[category];
+        if (!itemsInCategory) return null;
+
+        
+        const categoryName = category === 'softDrink' ? 'Soft Drinks' : 
+                            category === 'alcoholic' ? 'Alcoholic Beverages' :
+                            category.charAt(0).toUpperCase() + category.slice(1) + 's';
+
+        return (
+          <div key={category} className="menuCategory">
+            <h4 className="menuCategory__title">{categoryName}</h4>
+            <ul className="menuList__items">
+              {itemsInCategory.map((item, index) => {
+                
+                const originalIndex = menuItems.findIndex(
+                  menuItem => menuItem.name === item.name
+                );
+                
+                return (
+                  <li className="menuList__item" key={index}>
+                    <MenuItem 
+                      emoji={item.emoji} 
+                      name={item.name} 
+                      price={item.price}
+                      clickCount={item.quantity || 0}
+                      onCountChange={(name, newCount, price) => 
+                        handleCountChange(originalIndex, name, newCount, price)
+                      }
+                    />
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        );
+      })}
       <div className="menuList__total">Total: €{total}</div>
     </div>
   );
